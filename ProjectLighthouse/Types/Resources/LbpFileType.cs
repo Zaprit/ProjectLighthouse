@@ -16,5 +16,6 @@ public enum LbpFileType
     Png, // used in LBP Vita
     Quest, // A LBP3 quest, used in the organizertron
     StreamingChunk, // used in LBP3 dynamic thermo levels
+    PSPTex, // Odd texture used in PSP icons
     Unknown,
 }

@@ -35,6 +35,6 @@ public static class GameResourceHelper
         if (resource.StartsWith("g")) return textureGuids.Contains(resource[1..]);
 
         return LbpFile.FromHash(resource)?.FileType is LbpFileType.Png or LbpFileType.Jpeg or LbpFileType.Painting
-            or LbpFileType.Texture;
+            or LbpFileType.Texture or LbpFileType.PSPTex;
     }
 }

@@ -34,6 +34,7 @@ public partial class FileHelper
         // because this determines the type by the footer.
         string footer = Encoding.ASCII.GetString(readLastBytes(reader, 4));
         if (footer == "FARC") return LbpFileType.FileArchive;
+        if (footer == "H\0\0\0") return LbpFileType.Level;
 
         byte[] header = reader.ReadBytes(4);
 
@@ -64,7 +65,8 @@ public partial class FileHelper
 
         if (header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF && header[3] == 0xE0) return LbpFileType.Jpeg;
         if (header[0] == 0x89 && header[1] == 0x50 && header[2] == 0x4E && header[3] == 0x47) return LbpFileType.Png;
-
+        if (header[0] == 0x30 && header[1] == 0xa4 && header[2] == 0x77 && header[3] == 0xA1) return LbpFileType.PSPTex;
+        
         return LbpFileType.Unknown; // Still unknown.
     }
 
