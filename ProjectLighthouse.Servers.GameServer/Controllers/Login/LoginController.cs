@@ -77,9 +77,9 @@ public class LoginController : ControllerBase
             case Platform.PS3:
             case Platform.Vita:
             case Platform.UnitTest:
+            case Platform.PSP:
                 user = await this.database.Users.FirstOrDefaultAsync(u => u.LinkedPsnId == npTicket.UserId);
                 break;
-            case Platform.PSP:
             case Platform.Unknown:
             default:
                 throw new ArgumentOutOfRangeException();
@@ -203,16 +203,22 @@ public class LoginController : ControllerBase
         await this.database.SaveChangesAsync();
 
         // Create a new room on LBP2/3/Vita
-        if (token.GameVersion != GameVersion.LittleBigPlanet1) RoomHelper.CreateRoom(user.UserId, token.GameVersion, token.Platform);
+        if (token.GameVersion != GameVersion.LittleBigPlanet1 && token.GameVersion != GameVersion.LittleBigPlanetPSP) RoomHelper.CreateRoom(user.UserId, token.GameVersion, token.Platform);
 
-        return this.Ok
-        (
-            new LoginResult
+        // TODO: make this less hacky
+        if (Request.Headers.TryGetValue("X-exe-v", out _)) // If we're on psp
+        {
+            return this.Ok(new PSPLoginResult
             {
                 AuthTicket = "MM_AUTH=" + token.UserToken,
-                ServerBrand = VersionHelper.EnvVer,
-                TitleStorageUrl = ServerConfiguration.Instance.GameApiExternalUrl,
-            }
-        );
+            });
+        }
+        
+        return this.Ok(new LoginResult
+        {
+            AuthTicket = "MM_AUTH=" + token.UserToken,
+            ServerBrand = VersionHelper.EnvVer,
+            TitleStorageUrl = ServerConfiguration.Instance.GameApiExternalUrl,
+        });
     }
 }

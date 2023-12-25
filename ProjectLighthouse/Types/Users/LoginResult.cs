@@ -19,3 +19,11 @@ public class LoginResult : ILbpSerializable
     [XmlElement("titleStorageURL")]
     public string TitleStorageUrl { get; set; }
 }
+
+[XmlRoot("authTicket")]
+[XmlType("authTicket")]
+public class PSPLoginResult : ILbpSerializable
+{
+    [XmlText]
+    public string AuthTicket { get; set; }
+}

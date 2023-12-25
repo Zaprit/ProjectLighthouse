@@ -32,6 +32,22 @@ public class DigestMiddleware : Middleware
 
     public override async Task InvokeAsync(HttpContext context)
     {
+        // PSP Handling
+        if (context.Request.Headers.TryGetValue("X-exe-v", out StringValues exeVer) &&
+            context.Request.Headers.TryGetValue("X-data-v", out StringValues dataVer))
+        {
+            if (exeVer.Count > 1 || dataVer.Count > 1)
+            {
+                context.Response.StatusCode = 403; // Bail if there's multiple headers, PSP will never do this
+                return;
+            }
+
+            context.Response.Headers["X-exe-v"] = exeVer;
+            context.Response.Headers["X-data-v"] = dataVer;
+            await this.next(context);
+            return;
+        }
+        
         // Client digest check.
         if (!context.Request.Cookies.TryGetValue("MM_AUTH", out string? authCookie))
             authCookie = string.Empty;
