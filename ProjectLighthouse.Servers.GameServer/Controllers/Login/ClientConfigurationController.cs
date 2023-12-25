@@ -68,6 +68,9 @@ public class ClientConfigurationController : ControllerBase
         return this.Ok(ps);
     }
 
+    [HttpGet("news")]
+    public IActionResult News() => this.Ok();
+    
     [HttpPost("privacySettings")]
     [Produces("text/xml")]
     public async Task<IActionResult> SetPrivacySetting()
