@@ -48,6 +48,7 @@ public static partial class ControllerExtensions
         {
             // Prevent unescaped ampersands from causing deserialization to fail
             bodyString = CharacterEscapeRegex().Replace(bodyString, "&amp;");
+            bodyString = bodyString.Split("\0")[0]; // PSP is very jank
 
             XmlRootAttribute? root = null;
             if (rootElements.Length > 0)
