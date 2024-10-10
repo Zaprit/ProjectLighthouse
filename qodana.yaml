@@ -9,6 +9,3 @@ exclude:
     paths:
       - ProjectLighthouse.Localization
       - ProjectLighthouse/Migrations
-bootstrap: |+
-  set -eu
-  dotnet restore
