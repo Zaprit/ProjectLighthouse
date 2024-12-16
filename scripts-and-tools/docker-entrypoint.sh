@@ -12,10 +12,8 @@ if [ ! -d "/lighthouse/data" ]; then
     mkdir -p "/lighthouse/data"
 fi
 
-if [ -d "/lighthouse/temp" ]; then
-    log Note "Copying temp directory to data"
-    cp -rn /lighthouse/temp/* /lighthouse/data
-    rm -rf /lighthouse/temp
+if [ ! -d "/lighthouse/data/StaticFiles" ]; then
+    cp -r /lighthouse/temp/StaticFiles /lighthouse/data
 fi
 
 # Start server
